@@ -26,5 +26,6 @@ def sieve(number):
 check_prime = sieve(max_occurence + 1)
 primes_from_argv = [x for x in list_of_primes if x in check_prime]
 
+#printowanie
 for _ in primes_from_argv:
     print(_,end="\n")
