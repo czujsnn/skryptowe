@@ -27,6 +27,9 @@ class Test_TestSum(unittest.TestCase):
     def test_sum_rational_numbers(self):
         self.assertEqual(main.sum(1/3, 11/3), 4)
 
+    def test_sum_python_Fractions(self):
+        self.assertEqual(main.sum(Fraction(1,3),Fraction(2,3)),1)
+
     def test_sum_with_not_number_not_str(self):
         with self.assertRaises(TypeError):
             self.assertEqual(main.sum(1,[2,3]),1)
