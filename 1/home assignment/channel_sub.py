@@ -161,7 +161,9 @@ if __name__ == "__main__":
 
                         print(f"Podaj kanał, którego opis chcesz usunąć:\n{pretty_channel_list}")
                         CHANNEL_ID = input(" ")
+
                         if CHANNEL_ID in pretty_channel_list:
+                            
                             channels[CHANNEL_ID].remove_channel_description()
                             print(f"\n!!!Usunięto opis:!!!\n{channels[CHANNEL_ID].channel_id}:{channels[CHANNEL_ID].channel_description}")
                         
