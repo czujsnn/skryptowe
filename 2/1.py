@@ -9,13 +9,16 @@ Koleżanki i określenia nowych propozycji.
 Każdy już zapewne zdążył zauważyć iż dokończenie aktualnych projektów
 zmusza nas do przeanalizowania postaw uczestników wobec zadań stanowionych przez organizację.'''
 
+
 print((lancuch1+'\n'+lancuch2+'\n')*3, end='')
-
+print("\n\n")
 lancuch = "Алексей Федорович Карамазов был приятелем. В особенности в комнату почти гонением."
-
+print("\nDO LANUCHA:\n")
 print(lancuch[0])
 print(lancuch[0:2])
 print(lancuch[2:])
-print(lancuch[-2])
+print(lancuch[-2],"PRZEDOSTATNI")
 print(lancuch[-3:])
 print(lancuch[1::2])
+#lancuch[2] = "Q"
+#print(lancuch)
