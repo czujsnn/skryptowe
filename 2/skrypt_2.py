@@ -11,7 +11,7 @@ def text_extract(text):
         word_list.append(word)
     
     return number_list,word_list
-    
+
 def run():
     while True:
         user_input = input("")
