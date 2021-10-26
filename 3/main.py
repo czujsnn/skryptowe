@@ -27,3 +27,5 @@ print('\tKlasa.tab   ->', Klasa.tab)
 print('\tobiekt1.tab ->', obiekt1.tab)
 print('\tobiekt2.tab ->', obiekt2.tab)
 print('*' * 30)
+
+#print(obiekt._Klasa__zmienna2) -> access "private" attribute 
