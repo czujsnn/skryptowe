@@ -5,16 +5,21 @@ import time
 class Channel():
 
     def __init__(self,id:int,descr:str,) -> None:
+
         self.channel_id = id
         self.channel_description = descr
     
     def get_channel_info(self) -> list:
+
         return [self.channel_description,self.channel_id]
 
-    def update_channel_description(self,update_descr:str):
-        self.channel_description += f"{update_descr}"
+    def update_channel_description(self,update_descr:str) -> str:
 
-    def remove_channel_description(self):
+        self.channel_description += f"{update_descr}"
+        return True
+
+    def remove_channel_description(self) -> str:
+
         self.channel_description = ""
 
         return True     #for unittests' sake
@@ -22,6 +27,7 @@ class Channel():
 class Account:
 
     def __init__(self,name:str) -> None:
+
         self.subscribed_channels = []
         self.account_name = name
 
@@ -33,7 +39,7 @@ class Account:
             return True
 
         else:
-            print(f"{self.account_name} is already subscribed to {channel}")
+            print(f"{self.account_name} is already subscribed to {channel} or {channel} does not exist.")
 
             return False
 
@@ -86,29 +92,50 @@ if __name__ == "__main__":
 
                         print(f"Podaj ID użytkownika:\n{pretty_accounts_list}")
                         USR_ID = input(" ")
-                        print(f"Podaj kanał do zasubskrybowania:\n{pretty_channel_list}")
-                        CHANNEL_ID = input(" ")
-                        accounts[USR_ID].subscribe_to_channel(channels[CHANNEL_ID])
 
-                        print(f"Pomyślnie zasubskrybowano kanał {channels[CHANNEL_ID].channel_id}")
-                        
+                        if USR_ID in pretty_accounts_list:
+
+                            print(f"Podaj kanał do zasubskrybowania:\n{pretty_channel_list}")
+                            CHANNEL_ID = input(" ")
+
+                            if CHANNEL_ID in pretty_channel_list:
+                                accounts[USR_ID].subscribe_to_channel(channels[CHANNEL_ID])
+
+                                print(f"Pomyślnie zasubskrybowano kanał {channels[CHANNEL_ID].channel_id}")
+
+                            else:
+                                print(f"Brak kanału o ID {CHANNEL_ID}")
+
+                        else:
+                            print(f"Brak użytkownika o ID {USR_ID}")
+                            
                     elif usr_input == "2":
 
                         print(f"Podaj ID użytkownika:\n{pretty_accounts_list}")
                         USR_ID = input(" ")
 
-                        if accounts[USR_ID].subscribed_channels:
+                        if USR_ID in pretty_accounts_list:
 
-                            print(f"Podaj kanał do odsubskrybowania:\n{accounts[USR_ID].subscribed_channels[0].channel_id}")
-                            CHANNEL_ID = input(" ")
-                            accounts[USR_ID].unsubscribe_to_channel(channels[CHANNEL_ID])
-                            print(accounts[USR_ID].subscribed_channels)
+                            if accounts[USR_ID].subscribed_channels:
 
-                            print(f"Pomyślnie odsubskrybowano kanał {channels[CHANNEL_ID].channel_id}")
+                                print(f"Podaj kanał do odsubskrybowania:\n{accounts[USR_ID].subscribed_channels[0].channel_id}")
+                                CHANNEL_ID = input(" ")
 
+                                if CHANNEL_ID in pretty_channel_list:
+
+                                    accounts[USR_ID].unsubscribe_to_channel(channels[CHANNEL_ID])
+                                    print(accounts[USR_ID].subscribed_channels)
+                                    print(f"Pomyślnie odsubskrybowano kanał {channels[CHANNEL_ID].channel_id}")
+                                
+                                else:
+                                    print(f"Brak kanału o ID {CHANNEL_ID}")
+
+                            else:
+                                os.system("cls")
+                                print("!!! Brak treści do odsubskrybowania dla tego użytkownika. !!!")
+                        
                         else:
-                            os.system("cls")
-                            print("!!! Brak treści do odsubskrybowania dla tego użytkownika. !!!")
+                            print(f"Brak użytkownika o ID {USR_ID}")
 
                     elif usr_input == "3":
 
@@ -134,8 +161,14 @@ if __name__ == "__main__":
 
                         print(f"Podaj kanał, którego opis chcesz usunąć:\n{pretty_channel_list}")
                         CHANNEL_ID = input(" ")
-                        channels[CHANNEL_ID].remove_channel_description()
-                        print(f"\n!!!Usunięto opis:!!!\n{channels[CHANNEL_ID].channel_id}:{channels[CHANNEL_ID].channel_description}")
+
+                        if CHANNEL_ID in pretty_channel_list:
+                            
+                            channels[CHANNEL_ID].remove_channel_description()
+                            print(f"\n!!!Usunięto opis:!!!\n{channels[CHANNEL_ID].channel_id}:{channels[CHANNEL_ID].channel_description}")
+                        
+                        else:
+                            print(f"Brak kanału o ID {CHANNEL_ID}")
 
                     elif usr_input == "5":
 
@@ -182,5 +215,6 @@ if __name__ == "__main__":
                 os.system("cls")
 
             pass
+
         except EOFError:
             quit()
