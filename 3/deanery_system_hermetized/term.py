@@ -5,36 +5,74 @@ class Term():
 
     def __init__(self, hour, minute, duration=90, day=None) -> None:
 
-        self.hour=hour
-        self.minute=minute
-        self.duration=duration
+        self._hour=hour
+        self._minute=minute
+        self._duration=duration
         self.__day= day
-        self.translate = {"MON":"Poniedziałek","TUE":"Wtorek","WED":"Środa","THU":"Czwartek","FRI":"Piątek","SAT":"Sobota","SUN":"Niedziela"}
+        translate = {"MON":"Poniedziałek","TUE":"Wtorek","WED":"Środa","THU":"Czwartek","FRI":"Piątek","SAT":"Sobota","SUN":"Niedziela"}
+
+    @property
+    def hour(self):
+        return self._hour
+    
+    @hour.setter
+    def setHour(self, hour):
+        self._hour = hour
+
+    @property
+    def minute(self):
+        return self._minute
+    
+    @minute.setter
+    def setMinute(self, minute):
+        return self._minute
+
+    @property
+    def duration(self):
+        return self._duration
+
+    @duration.setter
+    def setDuration(self, duration):
+        self._duration = duration
+
+    @property
+    def day(self):
+        return self._day
+
+    @day.setter
+    def setDay(self, day):
+        self._day = day
 
     def __str__(self) -> str:
         if self.__day == None:
-            return f"{self.hour}:{self.minute} [{self.duration}]"
+            return f"{self._hour}:{self._minute} [{self._duration}]"
         else:
-            return f"{self.translate[self.__day.name]} {self.hour}:{self.minute} [{self.duration}]"
+            return f"{self.translate[self.__day.name]} {self._hour}:{self._minute} [{self._duration}]"
 
     def getStartTime(self):
-        int_minute = int(self.minute)
-
+        int_minute = int(self._minute)
+        print(int_minute)
         if int_minute < 10:
 
-            self.startMinutes = f"0{self.minute}"
+            self._startMinutes = f"0{self._minute}"
+
+            return self._startMinutes
 
         elif int_minute == 0:
 
-            self.startMinutes = f"00"
+            self._startMinutes = f"00"
 
-        return self.startMinutes
+            return self._startMinutes
+
+        else:
+
+            return self._minute
 
     def getEndTime(self):
 
-        int_minute = int(self.minute)
-        int_hour = int(self.hour)
-        int_duration = int(self.duration)
+        int_minute = int(self._minute)
+        int_hour = int(self._hour)
+        int_duration = int(self._duration)
 
         overflow_hour = (int_minute + int_duration) // 60
         overflow_minutes = (int_minute + int_duration) %60 
@@ -81,7 +119,7 @@ class Term():
 
     def equals(self,term):
 
-        if self.__day.difference(term.__day) == 0 and self.hour == term.hour and self.minute == term.minute:
+        if self.__day.difference(term.__day) == 0 and self._hour == term._hour and self._minute == term._minute:
 
             return True
 
@@ -89,40 +127,53 @@ class Term():
 
             return False
 
-
     def __lt__(self, termin):
-        if self.hour < termin.hour:
+
+        if self._hour < termin._hour:
             return True
-        elif self.hour == termin.hour:
-            if self.minute < termin.minute:
+
+        elif self._hour == termin._hour:
+
+            if self._minute < termin._minute:
                 return True
+
         return False
 
     def __eq__(self, termin):
+
         if str(self) == str(termin):
             return True
+
         return False
 
     def __le__(self, termin):
+
         if self < termin or self == termin:
             return True
+
         return False
     
     def __gt__(self, termin):
-        if self.hour > termin.hour:
+
+        if self._hour > termin._hour:
             return True
-        elif self.hour == termin.hour:
-            if self.minute > termin.minute:
+
+        elif self._hour == termin._hour:
+
+            if self._minute > termin._minute:
                 return True
+
         return False
     
     def __ge__(self, termin):
+
         if self > termin or self == termin:
             return True
+
         return False
 
     def __sub__(self, other):
-        return Term(other.hour, other.minute, duration=self.hour*60+self.minute+self.duration-other.hour*60-other.minute)
+        return Term(other._hour, other._minute, duration=self._hour*60+self._minute + self._duration - other._hour*60 - other._minute)
 
 
     def get_date_values(self,date):
@@ -148,6 +199,7 @@ class Term():
         return [[hours_values[0],date_values[0]],[hours_values[1],date_values[1]]]
 
     def weekDay(self,year, month, day):
+
         offset = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
         week   = ['Sunday', 
                 'Monday', 
@@ -157,24 +209,23 @@ class Term():
                 'Friday', 
                 'Saturday']
         afterFeb = 1
+
         if month > 2:
             afterFeb = 0
 
         aux = year - 1700 - afterFeb
-        # dayOfWeek for 1700/1/1 = 5, Friday
+
         dayOfWeek  = 5
-        # partial sum of days betweem current date and 1700/1/1
         dayOfWeek += (aux + afterFeb) * 365                  
-        # leap year correction    
         dayOfWeek += aux / 4 - aux / 100 + (aux + 100) / 400     
-        # sum monthly and day offsets
         dayOfWeek += offset[month - 1] + (day - 1)               
         dayOfWeek %= 7
+
         dayOfWeek = round(dayOfWeek)
 
         return (dayOfWeek)
 
-    #def setTerm(self, hour, minute, duration=90, day=None) -> None:
+
     def setTerm(self,date):
 
         parsed_date = self.get_date_values(date)
@@ -210,32 +261,35 @@ class Term():
         }
 
         self.__day = days[newWeekday]
-        self.hour = hourFrom
-        self.minute = hourMinuteFrom[1]
+        self._hour = hourFrom
+        self._minute = hourMinuteFrom[1]
 
 date1 = "27 I 2021 8:00 - 28 X 2021 21:00"
 date2 = "1 I 2021 11:00 - 1 I 2021 12:59"
 term1 = Term(8,30,90,Day.TUE)
 term2 = Term(10,30,90,Day.MON)
+print("CHUj")
+print(term2.getEndTime(),"AASdaSDASADSDSADSA")
+
 # print(term1)
 # print(term1.setTerm(date1))
 # print(term1)
 
 
-if __name__ == "__main__":
-    term1 = Term(8, 30)
-    term2 = Term(9, 45, 30)
-    term3 = Term(9, 45, 90)
-    print(term1)                             # Ma się wypisać: "8:30 [90]"
-    print(term2)                             # Ma się wypisać: "9:45 [30]"
-    print(term3)                             # Ma się wypisać: "9:45 [90]"
-    print("term1 < term2:", term1 < term2)   # Ma się wypisać True
-    print("term1 <= term2:", term1 <= term2) # Ma się wypisać True
-    print("term1 > term2:", term1 > term2)   # Ma się wypisać False
-    print("term1 >= term2:", term1 >= term2) # Ma się wypisać False
-    print("term2 == term2:", term2 == term2) # Ma się wypisać True
-    print("term2 == term3:", term2 == term3) # Ma się wypisać False
-    term4 = term3 - term1                    # Tworzy termin, którego:
-                                            # - godzina rozpoczęcia jest taka jak 'term1',
-                                            # - czas trwania to różnica minut pomiędzy godziną zakończenia 'term3' (11:15), a godziną rozpoczęcia 'term1' (8:30)
-    print(term4)  
+#if __name__ == "__main__":
+#    term1 = Term(8, 30)
+#    term2 = Term(9, 45, 30)
+#    term3 = Term(9, 45, 90)
+#    print(term1)                             # Ma się wypisać: "8:30 [90]"
+#    print(term2)                             # Ma się wypisać: "9:45 [30]"
+#    print(term3)                             # Ma się wypisać: "9:45 [90]"
+#    print("term1 < term2:", term1 < term2)   # Ma się wypisać True
+#    print("term1 <= term2:", term1 <= term2) # Ma się wypisać True
+#    print("term1 > term2:", term1 > term2)   # Ma się wypisać False
+#    print("term1 >= term2:", term1 >= term2) # Ma się wypisać False
+#    print("term2 == term2:", term2 == term2) # Ma się wypisać True
+#    print("term2 == term3:", term2 == term3) # Ma się wypisać False
+#    term4 = term3 - term1                    # Tworzy termin, którego:
+#                                            # - godzina rozpoczęcia jest taka jak 'term1',
+#                                            # - czas trwania to różnica minut pomiędzy godziną zakończenia 'term3' (11:15), a godziną rozpoczęcia 'term1' (8:30)
+#    print(term4)  
