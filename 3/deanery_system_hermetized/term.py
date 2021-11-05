@@ -9,7 +9,7 @@ class Term():
         self._minute=minute
         self._duration=duration
         self.__day= day
-        translate = {"MON":"Poniedziałek","TUE":"Wtorek","WED":"Środa","THU":"Czwartek","FRI":"Piątek","SAT":"Sobota","SUN":"Niedziela"}
+        self.translate = {"MON":"Poniedziałek","TUE":"Wtorek","WED":"Środa","THU":"Czwartek","FRI":"Piątek","SAT":"Sobota","SUN":"Niedziela"}
 
     @property
     def hour(self):
@@ -37,7 +37,7 @@ class Term():
 
     @property
     def day(self):
-        return self._day
+        return self._Term__day
 
     @day.setter
     def setDay(self, day):
@@ -48,10 +48,16 @@ class Term():
             return f"{self._hour}:{self._minute} [{self._duration}]"
         else:
             return f"{self.translate[self.__day.name]} {self._hour}:{self._minute} [{self._duration}]"
-
+    
+    def __repr__(self) -> str:
+        if self.__day == None:
+            return f"{self._hour}:{self._minute} [{self._duration}]"
+        else:
+            return f"{self.translate[self.__day.name]} {self._hour}:{self._minute} [{self._duration}]"
+                    
     def getStartTime(self):
         int_minute = int(self._minute)
-        print(int_minute)
+
         if int_minute < 10:
 
             self._startMinutes = f"0{self._minute}"
@@ -92,7 +98,6 @@ class Term():
         day_difference = self.__day.difference(term.__day)
 
         if day_difference > 0:
-
             return True
 
         elif day_difference == 0:
@@ -109,10 +114,7 @@ class Term():
                 return False
 
         else:
-
             return False
-
-        pass
 
     def laterThan(self,term):
         return not self.earlierThan(term)
@@ -175,6 +177,8 @@ class Term():
     def __sub__(self, other):
         return Term(other._hour, other._minute, duration=self._hour*60+self._minute + self._duration - other._hour*60 - other._minute)
 
+    def getStartTime_pr(self):
+        return f'{self._hour}:{self._minute}'
 
     def get_date_values(self,date):
 
@@ -188,26 +192,14 @@ class Term():
                 for _ in range(key_occurence):
                     date= re.sub(k,str(date_dict[k]),date)
         
-        
-        #^\d+?\s\d+\s\d+$
-        #^\s\d{1,2}:\d{1,2}\s$
         hours_values = re.findall(r"[0-9]{1,2}:[0-9]{2}",date)
         date_values = re.findall(r"[0-9]{1,2} [0-9]{1,2} [0-9]{4}",date)
         
-        
-
         return [[hours_values[0],date_values[0]],[hours_values[1],date_values[1]]]
 
     def weekDay(self,year, month, day):
 
         offset = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
-        week   = ['Sunday', 
-                'Monday', 
-                'Tuesday', 
-                'Wednesday', 
-                'Thursday',  
-                'Friday', 
-                'Saturday']
         afterFeb = 1
 
         if month > 2:
@@ -247,7 +239,7 @@ class Term():
         monthTo = int(dateTo[1])
         yearTo = int(dateTo[2])
 
-        self.duration = abs( (yearTo - yearFrom)*52560 + (monthTo - monthFrom)*43200 + (dayTo - dayFrom)*1440 + (hourTo - hourFrom)*60 + (minuteTo - minuteFrom) )
+        self._duration = abs( (yearTo - yearFrom)*52560 + (monthTo - monthFrom)*43200 + (dayTo - dayFrom)*1440 + (hourTo - hourFrom)*60 + (minuteTo - minuteFrom) )
 
         newWeekday = self.weekDay(yearFrom,monthFrom,dayFrom)
 
@@ -263,17 +255,6 @@ class Term():
         self.__day = days[newWeekday]
         self._hour = hourFrom
         self._minute = hourMinuteFrom[1]
-
-date1 = "27 I 2021 8:00 - 28 X 2021 21:00"
-date2 = "1 I 2021 11:00 - 1 I 2021 12:59"
-term1 = Term(8,30,90,Day.TUE)
-term2 = Term(10,30,90,Day.MON)
-print("CHUj")
-print(term2.getEndTime(),"AASdaSDASADSDSADSA")
-
-# print(term1)
-# print(term1.setTerm(date1))
-# print(term1)
 
 
 #if __name__ == "__main__":
@@ -293,3 +274,17 @@ print(term2.getEndTime(),"AASdaSDASADSDSADSA")
 #                                            # - godzina rozpoczęcia jest taka jak 'term1',
 #                                            # - czas trwania to różnica minut pomiędzy godziną zakończenia 'term3' (11:15), a godziną rozpoczęcia 'term1' (8:30)
 #    print(term4)  
+
+term1 = Term(1,30,90,Day.FRI)
+date3 = "5 V 2021 12:40 - 5 V 2021 12:41"
+term1.setTerm(date3)
+
+print(type(term1))
+values = (term1._hour,term1._minute,term1._duration,term1._Term__day.value)
+print(values)
+
+term1 = Term(8,30,1511,Day.TUE)
+date2 = "1 I 2021 11:00 - 1 I 2021 12:59"
+term1.setTerm(date2)
+values = (term1._hour,term1._minute,term1._duration,term1._Term__day.value)
+print(values)

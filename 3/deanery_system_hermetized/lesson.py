@@ -71,37 +71,72 @@ class Lesson(object):
             
     def earlierDay(self):
 
-        if True:
-            self._term._Term__day = Day(self._term._Term__day.value-1)
+       newDayValue = self._term._Term__day.value - 1
+
+       if newDayValue < 1:
+           return False
+
+       newDay = Day(newDayValue)
+
+       newTerm = Term(self._term._hour, self._term._minute,90, newDay)
+
+       if not self._timetable.can_be_transferred_to(newTerm, self._full_time):
+           return False
+
+       self._term._Term__day = newDay 
+
+       return True
 
     def laterDay(self):
+        newDayValue = self._term._Term__day.value + 1
 
-        if True:
-            self._term._Term__day = Day(self._term._Term__day.value+1)
+        if newDayValue > 7:
+            return False
 
-    def earlierTime(self):
+        newDay = Day(newDayValue)
+        newTerm = Term(self._term._hour, self._term._minute,90, newDay)
 
-        self.term.hour-=self.term.duration//60
-        t = self._term.duration%60
+        if not self._timetable.can_be_transferred_to(newTerm, self._full_time):
+            return False
 
-        if self._term.minute >= t:
-           self._term.minute -= t
-
-        else:
-
-            self._term.hour -= 1
-            self._term.minute -= (t-60)
+        self._term._day = newDay
+        return True
 
     def laterTime(self):
 
-        self._term.hour += self.term.duration//60
-        t = self._term.hour%60
-        self._term.hour += t
+        hourDifference = self._term.duration // 60
+        minuteDifference = self._term.duration % 60
 
-        if self._term.hour > 60:
+        if self._term.minute + minuteDifference >= 60:
+            minuteDifference -= 60
+            hourDifference += 1
 
-            self._term.hour -= 1
-            self._term.minute -= 60
+        newTerm = Term(self._term._hour + hourDifference,self._term._minute + minuteDifference,90,self._term._Term__day)
+
+        if not self._timetable.can_be_transferred_to(newTerm, self._full_time):
+            return False
+
+        self._term._hour += hourDifference
+        self._term._minute += minuteDifference
+
+    def earlierTime(self):
+
+        hourDifference = self._term.duration // 60
+        minuteDifference = self._term.duration % 60
+
+        if self._term.minute + minuteDifference < 0:
+            minuteDifference -= 60
+            hourDifference += 1
+
+        newTerm = Term(self._term._hour - hourDifference,self._term._minute - minuteDifference,90,self._term._Term__day)
+
+        if not self._timetable.can_be_transferred_to(newTerm, self._full_time):
+            return False
+
+        self._term._hour -= hourDifference
+        self._term._minute -= minuteDifference
+
+        return True
 
     def __str__(self) -> str:
 
@@ -110,7 +145,3 @@ class Lesson(object):
         else:
             self._fulltime_print = "Niestacjonarnych"
         return (f"{self._name} ({self._translate[self._term._Term__day.name]} {self._term._hour}:{self._term.getStartTime()}-{self._term.getEndTime()})\n{self._year} rok studiów {self._fulltime_print}\nProwadzący:{self._teacherName}")
-
-
-#lesson = Lesson(Term(15,30,90, Day.FRI), "Programowanie skryptowe", "Stanisław Polak", 2)
-#print(lesson)
