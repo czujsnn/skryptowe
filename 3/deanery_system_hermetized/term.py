@@ -274,17 +274,3 @@ class Term():
 #                                            # - godzina rozpoczęcia jest taka jak 'term1',
 #                                            # - czas trwania to różnica minut pomiędzy godziną zakończenia 'term3' (11:15), a godziną rozpoczęcia 'term1' (8:30)
 #    print(term4)  
-
-term1 = Term(1,30,90,Day.FRI)
-date3 = "5 V 2021 12:40 - 5 V 2021 12:41"
-term1.setTerm(date3)
-
-print(type(term1))
-values = (term1._hour,term1._minute,term1._duration,term1._Term__day.value)
-print(values)
-
-term1 = Term(8,30,1511,Day.TUE)
-date2 = "1 I 2021 11:00 - 1 I 2021 12:59"
-term1.setTerm(date2)
-values = (term1._hour,term1._minute,term1._duration,term1._Term__day.value)
-print(values)
