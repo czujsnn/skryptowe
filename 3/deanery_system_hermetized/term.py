@@ -1,13 +1,11 @@
 from day import Day
 import re
+from baseterm import BaseTerm
 
-class Term():
+class Term(BaseTerm):
 
     def __init__(self, hour, minute, duration=90, day=None) -> None:
-
-        self._hour=hour
-        self._minute=minute
-        self._duration=duration
+        super().__init__(hour, minute, duration)
         self.__day= day
         self.translate = {"MON":"Poniedziałek","TUE":"Wtorek","WED":"Środa","THU":"Czwartek","FRI":"Piątek","SAT":"Sobota","SUN":"Niedziela"}
 
@@ -41,7 +39,7 @@ class Term():
 
     @day.setter
     def setDay(self, day):
-        self._day = day
+        self.__day = day
 
     def __str__(self) -> str:
         if self.__day == None:
@@ -257,20 +255,3 @@ class Term():
         self._minute = hourMinuteFrom[1]
 
 
-#if __name__ == "__main__":
-#    term1 = Term(8, 30)
-#    term2 = Term(9, 45, 30)
-#    term3 = Term(9, 45, 90)
-#    print(term1)                             # Ma się wypisać: "8:30 [90]"
-#    print(term2)                             # Ma się wypisać: "9:45 [30]"
-#    print(term3)                             # Ma się wypisać: "9:45 [90]"
-#    print("term1 < term2:", term1 < term2)   # Ma się wypisać True
-#    print("term1 <= term2:", term1 <= term2) # Ma się wypisać True
-#    print("term1 > term2:", term1 > term2)   # Ma się wypisać False
-#    print("term1 >= term2:", term1 >= term2) # Ma się wypisać False
-#    print("term2 == term2:", term2 == term2) # Ma się wypisać True
-#    print("term2 == term3:", term2 == term3) # Ma się wypisać False
-#    term4 = term3 - term1                    # Tworzy termin, którego:
-#                                            # - godzina rozpoczęcia jest taka jak 'term1',
-#                                            # - czas trwania to różnica minut pomiędzy godziną zakończenia 'term3' (11:15), a godziną rozpoczęcia 'term1' (8:30)
-#    print(term4)  
