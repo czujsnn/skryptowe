@@ -5,8 +5,6 @@ from teacher import Teacher
 class Lesson(object):
 
     def __init__(self,timetable, term, name, teacher, year = None,full_time: bool = True):
-        #from timetable2 import Timetable2
-        #if not timetable.__class__.__name__ == "Timetable1": raise Exception("Timetable must be type of `Timetable2`.")
 
         self._timetable = timetable
         self._term = term

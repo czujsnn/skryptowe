@@ -37,6 +37,8 @@ class Test_DSystem(unittest.TestCase):
         self.assertEqual(lesson1 - t1, True)
         self.assertEqual(lesson2 - t2, True)
         self.assertEqual(lesson1._Lesson__teacher.imie,None)
+        self.assertEqual(lesson2._Lesson__teacher.imie,None)
+        
 
     
 

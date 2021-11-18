@@ -6,51 +6,34 @@ from typing import List
 class BaseTimetable():
     """ Class containing a set of operations to manage the timetable """
     def __init__(self):
-        self._lesson_list = []
+        self._lesson_list = {}
 
     @property
     def lessons(self):
         return self._lesson_list
 
     @lessons.setter
-    def setLessons(self, value):
-        self._lesson_list = value
+    def setLessons(self, lesson):
+        self._lesson_list[lesson.term] = lesson
 
 
     def busy(self, term: Term) -> bool:
-            
-            for lesson in self._lesson_list:
-
-                if lesson._term == term:
-
-                    return True
-
-                lesson_start = f"{lesson._term._hour}:{lesson._term._minute}"
-                lesson_end = lesson.term.getEndTime()
-                term_lesson_start = f"{term._hour}:{term._minute}"
-                term_lesson_end = term.getEndTime()
-
-                if lesson_end > term_lesson_start and lesson_end < term_lesson_end:
-                    return True
-
-                if term_lesson_end > lesson_start and term_lesson_end < lesson_end:
-                    return True
-
-                if lesson_start > term_lesson_start and lesson_start < term_lesson_end:
-                    return True
-
-                if term_lesson_start > lesson_start and term_lesson_start < lesson_end:
-                    return True
-
-            return False
+        for le in list(self._lesson_list.values()):
+            if le.term == term:
+                return True
+        return False
 
  ##########################################################
  
     def put(self, lesson: Lesson) -> bool:
-        if self.busy(lesson._term):
-            raise ValueError("This lesson term is busy")
+        if type(lesson) == Lesson:
+            if self.busy(lesson._term):
+                raise ValueError("This lesson term is busy")
 
-        return True if self._lesson_list.append(lesson) else False
+            self._lesson_list[lesson.term.__str__()] = lesson
+            return True
+        return False
+
 
     def parse(self, actions: List[str]) -> List[Action]:
 
@@ -89,7 +72,7 @@ class BaseTimetable():
 
         lessonTerm = None
 
-        for lesson in self.lesson_list:
+        for lesson in self.lesson_list.values():
 
             if lesson.term == term:
                 lessonTerm = lesson
@@ -103,7 +86,7 @@ class BaseTimetable():
         m_dur = 0
         h_dur = 0   
 
-        for lesson in self.lesson_list:
+        for lesson in self.lesson_list.values():
             if lesson.teacher == teacher:
                 h_dur += lesson.term.duration // 45 
                 m_dur += lesson.term.duration % 45
