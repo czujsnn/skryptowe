@@ -1,31 +1,23 @@
-from inspect import signature as sig
-
-######################
-# funkcja dekorująca #
-######################
-# zewnętrzna część pobiera argumenty funkcji dekorującej (argSuma/argRoznica)
-
 
 from inspect import signature
 
-def argumenty(root_args): # Get root args
-    def decoratorFunc(suma): # Get function
-        def wrap(*args): # Get inserted args
+def argumenty(root_args):
+    def decoratorFunc(suma): 
+        def wrap(*args): 
             nums = [arg for arg in args]
             neededArgs = len(list(signature(suma).parameters))
-            # print(nums, root_args, suma.__code__.co_argcount, len(list(signature(suma).parameters)))
+
 
             if len(nums) + len(root_args) < neededArgs:
-                raise TypeError("Za ma argumentow")
+                raise TypeError("suma() takes exactly 3 argumetns (2 given)")
 
             c = 0
             while len(nums) < neededArgs:
                 nums.append(root_args[c])
                 c += 1
-            
+
             suma(*nums)
 
-            # Return if not assigned
             try:
                 return root_args[c]
             except IndexError:
@@ -34,10 +26,6 @@ def argumenty(root_args): # Get root args
         return wrap
         
     return decoratorFunc
-
-#####################################
-# klasa, której funkcje udekorujemy #
-#####################################
 
 
 class Operacje:
@@ -62,6 +50,7 @@ class Operacje:
         if name == "suma":
             self.argumentySuma=value
             self.sum = argumenty(self.argumentySuma)(self.sumWithoutDecorator)
+
         if name == "roznica":
             self.argumentyRoznica=value
             self.substraction = argumenty(self.argumentyRoznica)(self.substractionWithoutDecorator)
