@@ -1,31 +1,34 @@
-
 from inspect import signature
 
-def argumenty(root_args):
-    def decoratorFunc(suma): 
-        def wrap(*args): 
+#dekoratory z argumentami zwracają funkcję, która wykorzystuje funkcje aby zwrócić inną funkcje, więc zwraca normalny dekorator
+
+def argumenty(main_args): #argumenty
+
+    def decorator_of_arguments(sum): #funkcja
+
+        def wrapper_of_arguments(*args):
+
             nums = [arg for arg in args]
-            neededArgs = len(list(signature(suma).parameters))
+            neededArgs = len(list(signature(sum).parameters))  #we get big list of sum function data, we only need its parameters; and to be specific its length
 
-
-            if len(nums) + len(root_args) < neededArgs:
-                raise TypeError("suma() takes exactly 3 argumetns (2 given)")
+            if len(nums) + len(main_args) < neededArgs:
+                raise TypeError(f"suma() takes exactly {neededArgs-1} arguments ({len(nums)+len(main_args) -1} given)")
 
             c = 0
             while len(nums) < neededArgs:
-                nums.append(root_args[c])
+                nums.append(main_args[c])
                 c += 1
 
-            suma(*nums)
+            sum(*nums) #wypakowywanie tablicy
 
             try:
-                return root_args[c]
+                return main_args[c]
             except IndexError:
                 return None
 
-        return wrap
-        
-    return decoratorFunc
+        return wrapper_of_arguments
+
+    return decorator_of_arguments
 
 
 class Operacje:
@@ -53,7 +56,9 @@ class Operacje:
 
         if name == "roznica":
             self.argumentyRoznica=value
-            self.substraction = argumenty(self.argumentyRoznica)(self.substractionWithoutDecorator)
+            self.substraction = argumenty(self.argumentyRoznica)(self.substractionWithoutDecorator) #applying decorator to argumenty
+                                                                                                    #with parameters: self.argumentyRoznica
+                                                                                                    #then it can be used on substraction w/o decorator 
 
 if __name__ == '__main__':
     op = Operacje()
@@ -73,10 +78,10 @@ if __name__ == '__main__':
 
     # Zmiana zawartości listy argumentów dekoratora  dla metody 'suma'
     op['suma'] = [1, 2]
-    # oznacza, że   argumentySuma=[1,2]
+    # oznacza, że argumentySuma=[1,2]
     print(op.argumentySuma)
 
     # Zmiana zawartości listy argumentów dekoratora  dla metody 'roznica'
     op['roznica'] = [1, 2, 3]
-    # oznacza, że   argumentyRoznica=[1,2,3]
+    # oznacza, że argumentyRoznica=[1,2,3]
     print(op.argumentyRoznica)
