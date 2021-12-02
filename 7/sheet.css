@@ -8,8 +8,8 @@ aside {
 aside h1 {
   margin: 0;
   font-size: 2vw;
-  animation-name: red2blue;
-  animation-duration: 2s;
+  animation-name: red_blue_shift;
+  animation-duration: 0.5s;
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }
@@ -26,7 +26,7 @@ footer {
   font-size: 1vw;
 }
 
-@keyframes red2blue {
+@keyframes red_blue_shift {
   from {
       color: red;
   }
@@ -51,7 +51,7 @@ main {
   /* Specyfikacja wyglądu */
   float: left;
   width: 450px;
-  clear: both;                  /* usu  */
+  clear: left;            
   padding: 10px;
   padding-bottom: 40px;
   font-size: 0.75vw;
@@ -61,7 +61,7 @@ main h1 {
   margin: 0;
 }
 
-main pre {
+main blockquote {
   margin: 0;
   overflow-x: auto;
 }
@@ -118,7 +118,7 @@ nav li {
   aside h1, aside h2{
     font-size: 6vw;
   }
-  pre{
+  blockquote{
     font-size: 3vw;
   }
 
