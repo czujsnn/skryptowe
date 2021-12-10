@@ -72,9 +72,11 @@ describe("Funkcja litery()", function () {      //litery test
   it("Returns 0 for 1234567890", function () {
     expect(litery("1234567890")).to.equal(0);
   });
+
   it("Returns 6 for ABC123456789!@#$EFG", function () {
     expect(litery("ABC123456789!@#$EFG")).to.equal(6);
   });
+
   it("Returns 8 for abcdABCD", function () {
     expect(litery("abcdABCD")).to.equal(8);
   });
@@ -93,9 +95,11 @@ describe("Funkcja suma()", function () {        //suma test
   before(function () {                  //runs before all tests in this file
     var add_for_sum = 0;
   });
+
   beforeEach(function () {              //runs before each test in this block
     add_for_sum = 0;
   });
+  
   afterEach(function () {               //runs after each test in this block - "reseting" add_for_sum
     add_for_sum = 0;
   });
